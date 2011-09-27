@@ -1,0 +1,38 @@
+<html>
+<head>
+    <title>Party Line Stalker</title>
+</head>
+<body>
+<script src="http://localhost:8081/socket.io/socket.io.js"></script>
+<script>
+    jQuery(function() {
+        var socket = io.connect('http://localhost:8081');
+
+        socket.on('msg', function (data) {
+            console.log(data);
+            jQuery("<li/>").text(data.id).appendTo("#in");
+        });
+
+        jQuery("#ok").bind("click", function(event) {
+            var msg = jQuery("#msg").val() + "\r\n";
+            socket.emit('msg', {id: msg});
+            jQuery("<li/>").text(msg).appendTo("#out");
+            jQuery("#msg").focus().val("");
+            event.preventDefault();
+        });
+    });
+</script>
+
+<h1>WebSocket Proxy</h1>
+
+<h2>Outgoing</h2>
+<form id="form">
+    <input id="msg" type="text" placeholder="Send a message"/>
+    <input id='ok' type="button" value='ok'/>
+</form>
+<ol id="out"></ol>
+
+<h2>Incoming</h2>
+<ol id="in"></ol>
+</body>
+</html>

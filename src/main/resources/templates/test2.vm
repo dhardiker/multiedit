@@ -1,0 +1,62 @@
+<html>
+<head>
+    <title>Party Line Stalker</title>
+</head>
+<body>
+<div id="messages"></div>
+<div id="newMessage">
+    <input type="text" name="key" id="key"/>
+    <input type="button" value="add" onclick="add( jQuery('#key').val() )"/>
+</div>
+<div id="refresh">
+    <input type="button" value="refresh" onclick="refresh();"/>
+</div>
+<script type="text/javascript">
+    var counter;
+
+    var lastMessage = 1;
+    var refresh = function () {
+        jQuery.ajax( {
+            type : "GET",
+            url : "/confluence/plugins/servlet/partyline?"+ lastMessage,
+            success : function (data, textStatus, xhr) {
+                var xmlDoc = jQuery.parseXML( data );
+                var xml = jQuery( xmlDoc );
+
+                var messagesDiv = jQuery("#messages");
+
+                var messages = xml.find("message");
+                for (var i=0; i<messages.length; i++) {
+                    var time = jQuery("time",messages[i],"time").text();
+                    var key = jQuery("key",messages[i]).text();
+
+                    messagesDiv.append("<div class='message'>"+  key +"</div>");
+                    if (lastMessage < time) lastMessage = time;
+                }
+            }
+        } );
+
+        clearTimeout(counter);
+        counter = setTimeout(refresh, 100);
+    };
+
+    var add = function (key) {
+        jQuery.ajax( {
+            type : "POST",
+            url : "/confluence/plugins/servlet/partyline?<message><key>"+ key +"</key></message>",
+
+            success : function (data, textStatus, xhr) {
+                refresh();
+            }
+        } );
+    };
+
+    var listener = function () {
+        jQuery("body").keypress( function (event) {
+            add( String.fromCharCode( event.which ) );
+        } );
+    };
+    listener();
+</script>
+</body>
+</html>

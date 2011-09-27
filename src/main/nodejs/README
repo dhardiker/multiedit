@@ -1,0 +1,17 @@
+Pre-requisites:
+
+* NodeJS
+  Using macports you can "sudo port install nodejs"
+
+* Node Package Manager (npmjs.org)
+  You can do the followng "curl http://npmjs.org/install.sh | sh"
+
+To setup:
+
+* From this directory:
+** "npm install socket.io express"
+
+To run:
+
+* From this directory:
+** "node app.js"

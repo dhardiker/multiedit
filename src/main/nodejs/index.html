@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>WebSocket Proxy</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        $(function() {
+            var socket = io.connect('http://localhost:8081');
+
+            socket.on('msg', function (data) {
+                console.log(data);
+                $("<li/>").text(data.id).appendTo("#in");
+            });
+
+            $("#form").bind("submit", function(event) {
+                var msg = $("#msg").val() + "\r\n";
+                socket.emit('msg', {id: msg});
+                $("<li/>").text(msg).appendTo("#out");
+                $("#msg").focus().val("");
+                return false;
+            });
+        });
+    </script>
+</head>
+<body>
+    <h1>WebSocket Proxy</h1>
+    
+    <h2>Outgoing</h2>
+    <form id="form">
+        <input id="msg" type="text" placeholder="Send a message"/>
+    </form>
+    <ol id="out"></ol>
+
+    <h2>Incoming</h2>
+    <ol id="in"></ol>
+</body>
+</html>
+
