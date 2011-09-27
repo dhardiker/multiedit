@@ -6,20 +6,6 @@
         <param name="configure.url">/admin/advuser/config.action</param>
     </plugin-info>
 
-    <servlet name="Atmosphere Servlet" key="atmosphere-servlet" class="org.atmosphere.cpr.AtmosphereServlet">
-        <description>AtmosphereServlet</description>
-        <url-pattern>/atmosphere*</url-pattern>
-        <init-param>
-            <param-name>org.atmosphere.websocket.WebSocketAtmosphereHandler</param-name>
-            <param-value>org.atmosphere.websocket.WebSocketAtmosphereHandler</param-value>
-        </init-param>
-    </servlet>
-
-    <servlet name="Party line Servlet" key="partyline-servlet" class="uk.ltd.hardiker.comms.PartyLineServlet">
-        <description>PartyLineServlet</description>
-        <url-pattern>/partyline</url-pattern>
-    </servlet>
-
     <xwork name="actions" key="actions">
         <package name="partyline-actions" extends="default" namespace="/partyline">
             <default-interceptor-ref name="defaultStack"/>
